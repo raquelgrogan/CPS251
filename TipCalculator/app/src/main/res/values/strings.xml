@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">TipCalculator</string>
+    <string name="textAmount">TextView</string>
+    <string name="calculate_tip">Calculate tip</string>
+    <string name="tipButton">Button</string>
+    <string name="calculatedTip">Enter an amount</string>
+    <string name="statusText">TextView</string>
+    <string name="tenTip">TextView</string>
+    <string name="fifteenTip">TextView</string>
+    <string name="twentyTip">TextView</string>
+</resources>
