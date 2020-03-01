@@ -30,7 +30,7 @@ public class MainFragment extends Fragment {
     private ListView myListView;
     private EditText nameText;
     private TextView errorValue;
-    private Button addNameButton;
+    private Button addNameButton, clearButton;
     ArrayList<String> listNames = new ArrayList<String>();
     ArrayAdapter<String> adapter;
 
@@ -51,12 +51,27 @@ public class MainFragment extends Fragment {
         myListView = view.findViewById(R.id.listView);
         nameText = view.findViewById(R.id.nameValue);
         addNameButton = view.findViewById(R.id.addNameButton);
+        clearButton = view.findViewById(R.id.clearButton);
         errorValue = view.findViewById(R.id.errorValue);
 
-        //adapter prints back listNames array
+        //initialize adapter
         adapter = new ArrayAdapter<String>(view.getContext(),
                 android.R.layout.simple_list_item_1,listNames);
         myListView.setAdapter(adapter);
+        //update list names in rotation
+//        if (!mViewModel.listNames.isEmpty()){
+//            listNames = mViewModel.getNames();
+//            adapter.addAll(listNames);
+//            adapter.notifyDataSetChanged();
+//        }
+
+        if(!mViewModel.listNames.isEmpty()){
+            for (String name : mViewModel.getNames())
+                listNames.add(name);
+        }
+
+        adapter.notifyDataSetChanged();
+
 
         addNameButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -66,15 +81,24 @@ public class MainFragment extends Fragment {
                     errorValue.setText("Please Enter A Name");
                 }
                 else {
-                    errorValue.setText("Clicked");//set to blank later
+                    errorValue.setText("");//set to blank later
                     String name = nameText.getText().toString();
                     // Call addNames() from MainViewModel
-                    //listNames = mViewModel.addNames(name);
+                    mViewModel.addNames(name);
+                    // add name directly
                     listNames.add(name);
                     //notify change
                     adapter.notifyDataSetChanged();
                     Log.d("this is my array", "arr: " + Arrays.toString(new ArrayList[]{listNames}));
                 }
+            }
+        });
+        clearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listNames.clear();
+                mViewModel.listNames.clear();
+                adapter.notifyDataSetChanged();
             }
         });
         return view;

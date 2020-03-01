@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">AddNameSaveDataProject</string>
     <string name="add_name">Add Name</string>
+    <string name="clear_list">Clear List</string>
 </resources>
