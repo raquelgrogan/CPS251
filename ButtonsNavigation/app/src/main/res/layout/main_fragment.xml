@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.main.MainFragment">
+
+    <Button
+        android:id="@+id/flowerButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="68dp"
+        android:text="@string/flower_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/fireFlowerImage"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/mushroomButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="63dp"
+        android:text="@string/mushroom_button"
+        app:layout_constraintBottom_toTopOf="@+id/yoshiButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/mushroomImage"
+        app:layout_constraintTop_toBottomOf="@+id/flowerButton"
+        app:layout_constraintVertical_bias="0.491" />
+
+    <Button
+        android:id="@+id/yoshiButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="68dp"
+        android:text="@string/yoshi_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/yoshiImage"
+        app:layout_constraintTop_toBottomOf="@+id/flowerButton"
+        app:layout_constraintVertical_bias="0.774" />
+
+    <ImageView
+        android:id="@+id/fireFlowerImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="27dp"
+        android:layout_marginEnd="68dp"
+        android:layout_marginBottom="78dp"
+        android:src="@drawable/fireflower"
+        app:layout_constraintBottom_toTopOf="@+id/mushroomImage"
+        app:layout_constraintEnd_toStartOf="@+id/flowerButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="TODO" />
+
+    <ImageView
+        android:id="@+id/mushroomImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="34dp"
+        android:layout_marginEnd="63dp"
+        android:layout_marginBottom="82dp"
+        android:src="@drawable/mushroom"
+        app:layout_constraintBottom_toTopOf="@+id/yoshiImage"
+        app:layout_constraintEnd_toStartOf="@+id/mushroomButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fireFlowerImage"
+        android:contentDescription="TODO" />
+
+    <ImageView
+        android:id="@+id/yoshiImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="68dp"
+        android:layout_marginBottom="49dp"
+        android:src="@drawable/yoshi"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/yoshiButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mushroomImage"
+        android:contentDescription="TODO" />
+</androidx.constraintlayout.widget.ConstraintLayout>
