@@ -52,9 +52,4 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-    public void openActivity(){
-        Intent i = new Intent(MainActivity.this, RecievingActivity.class);
-        startActivity(i);
-    }
 }
