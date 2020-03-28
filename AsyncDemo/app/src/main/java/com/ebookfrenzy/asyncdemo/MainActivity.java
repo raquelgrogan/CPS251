@@ -19,7 +19,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void buttonClick(View view){
-        AsyncTask task = new MyTask().execute();
+        //AsyncTask task = new MyTask().execute();
+        AsyncTask task = new
+                MyTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         //task.cancel(true);
     }
 
