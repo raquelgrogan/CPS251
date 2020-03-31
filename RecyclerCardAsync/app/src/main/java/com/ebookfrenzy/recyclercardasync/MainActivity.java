@@ -13,14 +13,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import static com.ebookfrenzy.recyclercardasync.NameData.clear;
-import static com.ebookfrenzy.recyclercardasync.NameData.addName;
 import static com.ebookfrenzy.recyclercardasync.NameData.names;
 import static com.ebookfrenzy.recyclercardasync.NameData.times;
 
@@ -42,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        nameTextView = findViewById(R.id.name_text);
 
         //creating the linear layout
         recyclerView = findViewById(R.id.recyclerView);
@@ -73,7 +72,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addName(View view){
-        AsyncTask task = new MyTask().execute(name);
+        name = nameTextView.getText().toString();
+        //AsyncTask task = new MyTask().execute(name);
+        AsyncTask task = new
+                MyTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,name);
+
     }
 
     public void clearList(View view){
@@ -85,8 +88,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            nameTextView = findViewById(R.id.name_text);
-            name = nameTextView.getText().toString();
         }
 
         @Override
@@ -103,20 +104,20 @@ public class MainActivity extends AppCompatActivity {
                     Log.i(TAG, "Caught thread sleep error");
                 }
             }
-            publishProgress(name, randomString);
+            publishProgress(strings[0], randomString);
             return "Button Pressed";
         }
 
         protected void onProgressUpdate(String... values) {
             names.add(values[0]);
             times.add(values[1]);
-            adapter.notifyDataSetChanged();
             Log.i(TAG,"Name Text = "+values[0]+", the wait was: "+values[1]);
 
         }
 
         @Override
         protected void onPostExecute(String s) {
+            adapter.notifyDataSetChanged();
         }
     }
 }
