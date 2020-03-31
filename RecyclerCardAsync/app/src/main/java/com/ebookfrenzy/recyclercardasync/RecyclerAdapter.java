@@ -1,5 +1,6 @@
 package com.ebookfrenzy.recyclercardasync;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,11 +11,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import static com.ebookfrenzy.recyclercardasync.NameData.getName;
+import static com.ebookfrenzy.recyclercardasync.NameData.getNamesArr;
+import static com.ebookfrenzy.recyclercardasync.NameData.getTime;
+import static com.ebookfrenzy.recyclercardasync.NameData.getTimesArr;
+
+
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.
         ViewHolder>{
     private final String TAG = "ErrorTag";
-    NameData nameData = new NameData();
-    ArrayList<String> nameDataArray;
+
 
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView userName;
@@ -24,11 +30,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.
             Log.i(TAG,"inside ViewHolder");
             userName = itemView.findViewById(R.id.user_name);
         }
-    }
-
-    public RecyclerAdapter(ArrayList<String> nameArray){
-        nameDataArray = nameArray;
-        Log.i(TAG, "in RecyclerAdapter constructor");
     }
 
     @Override
@@ -42,17 +43,17 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        Log.i(TAG,"The content of nameArray[i] is: "+nameDataArray.indexOf(i));
-        if(nameDataArray.isEmpty()){
+        Log.i(TAG,"The content of nameArray[i] is: "+getName(i)+" time="+getTime(i));
+        if(getNamesArr().isEmpty()||getTimesArr().isEmpty()){
             Log.i(TAG,"There's an empty array in Recycler Adapter!");
         }else {
-            viewHolder.userName.setText(nameDataArray.get(i));
+            viewHolder.userName.setText("The name is "+getName(i)+" and it took "+getTime(i)+" seconds");
         }
     }
 
     @Override
     public int getItemCount() {
-        return nameData.getNames().size();
+        return getNamesArr().size();
     }
 
 }

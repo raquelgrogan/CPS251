@@ -13,14 +13,21 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 
 import java.util.ArrayList;
 import java.util.Random;
 
+import static com.ebookfrenzy.recyclercardasync.NameData.clear;
+import static com.ebookfrenzy.recyclercardasync.NameData.addName;
+import static com.ebookfrenzy.recyclercardasync.NameData.names;
+import static com.ebookfrenzy.recyclercardasync.NameData.times;
+
+
 public class MainActivity extends AppCompatActivity {
 
-    NameData nameData = new NameData();
+    //NameData nameData = new NameData();
     EditText nameTextView;
     String name;
     RecyclerView recyclerView;
@@ -41,7 +48,8 @@ public class MainActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         //setting up an adapter connected to recyclerView
-        adapter = new RecyclerAdapter(nameData.getNames());
+        //adapter = new RecyclerAdapter();
+        adapter = new RecyclerAdapter();
         recyclerView.setAdapter(adapter);
     }
 
@@ -54,12 +62,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -70,8 +75,10 @@ public class MainActivity extends AppCompatActivity {
     public void addName(View view){
         AsyncTask task = new MyTask().execute(name);
     }
+
     public void clearList(View view){
-        nameData.clearNames();
+        clear();
+        adapter.notifyDataSetChanged();
     }
 
     private class MyTask extends AsyncTask<String, String, String> {
@@ -84,8 +91,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-//            final int max = 10;
-//            final int min = 1;
             int random = new Random().nextInt(11);
             String randomString = Integer.toString(random);
             int i =0;
@@ -103,7 +108,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         protected void onProgressUpdate(String... values) {
-            nameData.addName(values[0]);
+            names.add(values[0]);
+            times.add(values[1]);
             adapter.notifyDataSetChanged();
             Log.i(TAG,"Name Text = "+values[0]+", the wait was: "+values[1]);
 
