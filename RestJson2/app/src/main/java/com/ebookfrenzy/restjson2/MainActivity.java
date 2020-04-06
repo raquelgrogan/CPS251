@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -41,8 +42,8 @@ public class MainActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
 
         //GET THE URL STRING TO THE JASON FILE
-        String url = "http://198.199.80.235/cps276/cps276_examples/datasources/coupons_json_251.json";
-
+        String url = "http://198.199.80.235/cps276/cps276_examples/datasources/names_json_251v2.json";
+        //String url = "http://198.199.80.235/cps276/cps276_examples/datasources/coupons_json_251.json";
         // CREATES AN INSTANCE OF A JsonObjectRequest AND PASS IN SOME PARAMETERS
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
 
@@ -61,18 +62,22 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
 
                         // USE METHOD fromJson TO DESERALIZE THE SPECIFIED JSON INTO AN OBJECT OF THE SPECIFIED CLASS
-                        Coupons coupons = gson.fromJson(response.toString(), Coupons.class);
-
+                        //Coupons coupons = gson.fromJson(response.toString(), Coupons.class);
+                        Names names = gson.fromJson(response.toString(),Names.class);
+                        Log.i("errorTag","names = "+response.toString());
                         //GETS THE COUPON LIST FROM THE COUPONS CLASS AND PUTS IT INTO cpnlst AND ADDS IT AS A PARAMETER TO THE RecyclerViewAdaptor() CONSTRUCTOR
-                        ArrayList<Coupons> cpnlst = coupons.getCouponList();
-                        RecyclerViewAdapter adapter = new RecyclerViewAdapter(cpnlst);
+                        //ArrayList<Coupons> cpnlst = coupons.getCouponList();
+                        ArrayList<Names> nmslst = names.getNamesList();
+                        Log.i("errorTag","nmslst = "+nmslst);
+                        //RecyclerViewAdapter adapter = new RecyclerViewAdapter(cpnlst);
+                        RecyclerViewAdapterName adapter = new RecyclerViewAdapterName(nmslst);
                         recyclerView.setAdapter(adapter);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        //DO SOMETHING HERE WITH ERROR MESSAGE
+                        Log.i("errorTag","Error in volley = "+error.getMessage());
                     }
                 }
         );
