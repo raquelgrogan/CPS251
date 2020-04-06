@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">RestJson2</string>
+    <string name="coupon_store">coupon_store</string>
+    <string name="coupon_text">coupon_text</string>
+    <string name="coupon_expire_msg">coupon_expire_msg</string>
+    <string name="coupon_expire_date">coupon_expire_date</string>
+    <string name="coupon_code">coupon_code</string>
+    <string name="coupon_category_msg">coupon_category_msg</string>
+    <string name="coupon_category">coupon_category</string>
+</resources>

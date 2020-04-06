@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
 
+
         final Gson gson = new Gson();
         RequestQueue mRequestQ = Volley.newRequestQueue(this);
         //parseJSON();
@@ -50,9 +51,10 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         Log.i(TAG, "response: " + response.toString());
                         PersonArray personArray = gson.fromJson(response.toString(), PersonArray.class);
-                        Log.i(TAG, "personArray: " + personArray.getGender());
+                        Log.i(TAG, "personArray: " + personArray.getPersonArray());
                         ArrayList<PersonArray> personList = personArray.getPersonArray();
                         Log.i(TAG, "personList: " + personList.toString());
+                        Log.i(TAG, "personArray: " + personArray.getAddress());
                         RecyclerAdapter adapter = new RecyclerAdapter(personList);
                         mRecyclerView.setAdapter(adapter);
                     }
