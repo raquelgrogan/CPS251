@@ -14,23 +14,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.ebookfrenzy.phonebooksql.Contact;
+import com.ebookfrenzy.phonebooksql.MainActivity;
 import com.ebookfrenzy.phonebooksql.R;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 
 public class MainFragment extends Fragment {
 
@@ -40,6 +35,9 @@ public class MainFragment extends Fragment {
     private EditText contactName;
     private EditText contactPhone;
 
+    public String toastMsg="";
+    private List<Contact> allContacts;
+
     public static MainFragment newInstance() {
         return new MainFragment();
     }
@@ -48,7 +46,6 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        Log.i("errorTag","Inside onCreateView");
         return inflater.inflate(R.layout.main_fragment, container, false);
     }
 
@@ -59,48 +56,59 @@ public class MainFragment extends Fragment {
         // TODO: Use the ViewModel
         contactName = getView().findViewById(R.id.contactName);
         contactPhone = getView().findViewById(R.id.contactPhone);
-        Log.i("errorTag","Inside onActivityCreated");
         observerSetup();
         recyclerSetup();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
     }
 
     public static class ByName implements Comparator<Contact> {
         @Override
         public int compare(Contact name1, Contact name2) {
-            return name1.getName().compareTo(name2.getName());
+            return name1.getName().toLowerCase().compareTo(name2.getName().toLowerCase());
         }
     }
 
     public void getAllContacts(){
-        observerSetup();
-        Toast.makeText(getContext(), "show all contacts", Toast.LENGTH_SHORT).show();
+        adapter.setContactList(allContacts);
+        Log.i("errorTag","allContacts= "+allContacts);
     }
     public void addContact(){
         String name = contactName.getText().toString();
         String phone = contactPhone.getText().toString();
-        if (!name.equals("") && !phone.equals("")) {
+        if ((!name.equals("") && !phone.equals("")) && (!name.equals(null) && !phone.equals(null))) {
             Contact contact = new Contact(name,
                     phone);
             mViewModel.insertContact(contact);
             clearFields();
         } else {
-            Toast.makeText(getContext(), "Incomplete Information", Toast.LENGTH_SHORT).show();
+            toastMsg = "Incomplete Information";
+            ((MainActivity)getActivity()).customToast(toastMsg);
         }
     }
     public void findContact(){
-        mViewModel.findContact(contactName.getText().toString());
-        Toast.makeText(getContext(), "Find Contact", Toast.LENGTH_SHORT).show();
+        if (contactName.getText().toString().equals("")){
+            toastMsg="Please enter a name/partial name";
+            ((MainActivity)getActivity()).customToast(toastMsg);
+        }
+        else {
+            mViewModel.findContact(contactName.getText().toString());
+        }
     }
     public void sort_az(){
         Log.i("errorTag", "getListContacts = " + adapter.getList());
         Collections.sort(adapter.getList(), new MainFragment.ByName());
         adapter.notifyDataSetChanged();
-        Toast.makeText(getContext(), "sort contacts a-z", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), "sort contacts a-z", Toast.LENGTH_SHORT).show();
     }
     public void sort_za(){
         Collections.sort(adapter.getList(), new MainFragment.ByName().reversed());
         adapter.notifyDataSetChanged();
-        Toast.makeText(getContext(), "sort contacts z-a", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), "sort contacts z-a", Toast.LENGTH_SHORT).show();
     }
 
     private void clearFields() {
@@ -109,10 +117,11 @@ public class MainFragment extends Fragment {
     }
 
     public void observerSetup() {
-        mViewModel.getAllProducts().observe(this, new Observer<List<Contact>>() {
+        mViewModel.getAllContacts().observe(this, new Observer<List<Contact>>() {
             @Override
-            public void onChanged(@Nullable final List<Contact> products) {
-                adapter.setContactList(products);
+            public void onChanged(@Nullable final List<Contact> contacts) {
+                adapter.setContactList(contacts);
+                allContacts = contacts;
             }
         });
         mViewModel.getSearchResults().observe(this,
@@ -120,11 +129,14 @@ public class MainFragment extends Fragment {
                     @Override
                     public void onChanged(@Nullable final List<Contact> contacts) {
                         if (contacts.size() > 0) {
-                            contactName.setText(contacts.get(0).getName());
-                            contactPhone.setText(contacts.get(0).getPhone());
+                            adapter.setContactList(contacts);
                         } else {
                             //SET UP TOAST MSG
-                            Toast.makeText(getContext(), "No contacts found", Toast.LENGTH_SHORT).show();
+                            adapter.setContactList(allContacts);
+                            toastMsg = "No contacts found";
+                            ((MainActivity)getActivity()).customToast(toastMsg);
+                            //mainActivity.customToast(toastMsg);
+                            //Toast.makeText(getContext(), "No contacts found", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -143,10 +155,8 @@ public class MainFragment extends Fragment {
         adapter.setOnItemClickListner(new ContactListAdapter.onItemClickListner() {
             @Override
             public void onClick(ImageView image, String cardName) {
-                Log.i("errorTag", "cardName in main is: " + cardName);
                 mViewModel.deleteContact(cardName);
                 clearFields();
-                Toast.makeText(getContext(), "onClickImage Delete", Toast.LENGTH_LONG).show();
             }
         });
     }

@@ -4,13 +4,22 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ebookfrenzy.phonebooksql.ui.main.MainFragment;
+
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,9 +33,26 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main_activity);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, MainFragment.newInstance())
+                    .replace(R.id.container, mf)
                     .commitNow();
         }
+    }
+
+    public void customToast(String mfToastMsg){
+        Log.i("errorTag","toastMsg = "+mfToastMsg);
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_toast,
+                (ViewGroup)findViewById(R.id.toast_root));
+        Toast toast = new Toast(getApplicationContext());
+        toast.makeText(mf.getContext(),mfToastMsg,Toast.LENGTH_LONG);
+        TextView toast_text = layout.findViewById(R.id.toast_text);
+        toast_text.setText(mfToastMsg);
+        toast.setGravity(Gravity.CENTER,0,0);
+        toast.setView(layout);
+        if(!mfToastMsg.equals("")) {
+            toast.show();
+        }
+        mf.toastMsg="";
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -40,8 +66,6 @@ public class MainActivity extends AppCompatActivity {
         //handle options
         switch (item.getItemId()) {
             case R.id.show_all_contacts:
-                mf.observerSetup();
-                mf.recyclerSetup();
                 // show_all_contacts item was selected
                 mf.getAllContacts();
                 return true;

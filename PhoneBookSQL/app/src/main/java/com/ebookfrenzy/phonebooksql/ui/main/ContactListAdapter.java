@@ -26,7 +26,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     onItemClickListner onItemClickListner;
 
     public List<Contact> getList(){
-        return contactList;
+        return this.contactList;
     }
     public void setOnItemClickListner(ContactListAdapter.onItemClickListner onItemClickListner) {
         this.onItemClickListner = onItemClickListner;
@@ -45,6 +45,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     }
 
     public void setContactList(List<Contact> contacts) {
+        Log.i("errorTag","contacts in setContactList: "+contacts);
         contactList = contacts;
         notifyDataSetChanged();
     }

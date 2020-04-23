@@ -2,6 +2,7 @@ package com.ebookfrenzy.phonebooksql;
 
 import android.app.Application;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -20,6 +21,7 @@ public class ContactRepository{
     private LiveData<List<Contact>> allContacts;
 
     private ContactDao contactDao;
+
     // These methods will create and call appropriate AsyncTask instances
     //and pass through a reference to the DAO.
     public ContactRepository(Application application) {
@@ -29,8 +31,8 @@ public class ContactRepository{
         allContacts = contactDao.getAllContacts();
         //^^each time a change occurs to the database table the UI controller observer will be notified
         //and the RecyclerView can be updated
-        //contactList = contactDao.listOfContacts();
     }
+
     public void insertContact(Contact newcontact) {
         InsertAsyncTask task = new InsertAsyncTask(contactDao);
         task.execute(newcontact);
@@ -44,12 +46,9 @@ public class ContactRepository{
         task.delegate = this;
         task.execute(name);
     }
-    public void getContactList(){
-        ContactListTask task = new ContactListTask(contactDao);
-        task.execute();
-    }
 
     private void asyncFinished(List<Contact> results) {
+        Log.i("errorTag","result is "+ results);
         searchResults.setValue(results);
     }
 
@@ -95,21 +94,8 @@ public class ContactRepository{
             return null;
         }
     }
-    private static class ContactListTask extends AsyncTask<Void,Void,List<Contact>>{
-        public static List<Contact> contactList;
-        private ContactDao asyncTaskDao;
-        ContactRepository delegate;
-        ContactListTask(ContactDao dao){asyncTaskDao = dao;}
-        @Override
-        protected List<Contact> doInBackground(Void... voids) {
-            contactList = asyncTaskDao.listOfContacts();
-            return null;
-        }
-        @Override
-        protected void onPostExecute(List<Contact> result) {
-            delegate.asyncFinished(result);
-        }
-    }
+
+
 
     //methods to obtain results and contact in ViewModel
     public LiveData<List<Contact>> getAllContacts() {
@@ -118,7 +104,7 @@ public class ContactRepository{
     public MutableLiveData<List<Contact>> getSearchResults() {
         return searchResults;
     }
-    //public List<Contact> listOfContacts(){return contactList;}
+
 
 
 }

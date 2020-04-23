@@ -1,12 +1,12 @@
 package com.ebookfrenzy.phonebooksql.ui.main;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.ebookfrenzy.phonebooksql.Contact;
 import com.ebookfrenzy.phonebooksql.ContactRepository;
@@ -18,7 +18,6 @@ public class MainViewModel extends AndroidViewModel {
     private ContactRepository repository;
     private LiveData<List<Contact>> allContacts;
     private MutableLiveData<List<Contact>> searchResults;
-    private List<Contact> contactList;
 
     public MainViewModel(@NonNull Application application) {
         super(application);
@@ -26,19 +25,16 @@ public class MainViewModel extends AndroidViewModel {
         //^^gives productRepos access to application context
         allContacts = repository.getAllContacts();
         searchResults = repository.getSearchResults();
-        //contactList = repository.listOfContacts();
     }
 
     MutableLiveData<List<Contact>> getSearchResults(){
         return searchResults;
     }
 
-    LiveData<List<Contact>> getAllProducts(){
+    LiveData<List<Contact>> getAllContacts(){
         return allContacts;
     }
-    List<Contact> getListContacts(){
-        return contactList;
-    }
+
     public void insertContact(Contact contact){
         repository.insertContact(contact);
     }
@@ -48,7 +44,6 @@ public class MainViewModel extends AndroidViewModel {
     public void deleteContact(String name){
         repository.deleteContact(name);
     }
-
 
 
 }

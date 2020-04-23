@@ -7,4 +7,6 @@
     <string name="find_contact">Find Contact</string>
     <string name="sort_a_z">Sort A-Z</string>
     <string name="sort_z_a">Sort Z-A</string>
+    <string name="hello">Hello?</string>
+    <string name="text">text</string>
 </resources>
